@@ -70,7 +70,7 @@ echo MySQL密码：%custom_pswd%
 
 echo.
 echo 正在设置环境变量...
-wmic ENVIRONMENT where "name='path' and username='<system>'" set VariableValue="%suite_home%php7.1nts;%suite_home%mysql5.7\bin;%suite_home%hugo0.27;%path%"
+wmic ENVIRONMENT where "name='path' and username='<system>'" set VariableValue="%suite_home%php7.1nts;%suite_home%mysql5.7\bin;%suite_home%tools\composer;%suite_home%hugo0.27;%path%"
 setx path "%path%"
 
 rem echo.

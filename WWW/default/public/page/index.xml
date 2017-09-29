@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pages on phpCaddy</title>
+    <link>/page/</link>
+    <description>Recent content in Pages on phpCaddy</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 24 Sep 2017 17:58:08 +0800</lastBuildDate>
+    
+	<atom:link href="/page/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>00.关于 phpCaddy</title>
+      <link>/page/about/</link>
+      <pubDate>Sun, 24 Sep 2017 17:58:08 +0800</pubDate>
+      
+      <guid>/page/about/</guid>
+      <description>phpCaddy 是一个 windows 的 php + caddy服务器的套件 只在64位win10上测试过，它包括： 1. caddy (golang 写的可以 自动https 的 HTTP/2 Web服务器) 2. php (以 fastcgi 方式运行，默认绑定 9000 端口) 3. mysql (5.7 支持 json 类型) 4. redis (现在也是标配了) 5. apache (给不习惯用 caddy 的人)  &amp;lt;.bat&amp;gt; 批处理方式安装、启动和停止  1. 原因一：我不会写客户端，而我有觉得与其把精力发在写客户端上，不如把文档写清晰，让更多人会用，用的灵活 2. 原因二：灵活，用 &amp;lt;.bat&amp;gt; 批处理可一方便的改里面各个组件的版本，所以非常灵活 3. 原因三：我做的只是我用的版本，包括组件的版本 64/32bit版本 包括测试的windows版本，所以我没做的，大家可以自行扩展  Linux下 怎么安装 php + caddy phpCaddy 是没有提供 linux 版本的，因为已经有大牛写了，抄过来不合适，所以请移步
+ 先安装 lamp，解压这步之后，先在 php.sh 里把 --enable-fpm \ 添加进去，再进行安装</description>
+    </item>
+    
+  </channel>
+</rss>

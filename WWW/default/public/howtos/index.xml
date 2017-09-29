@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Howtos on phpCaddy</title>
+    <link>/howtos/</link>
+    <description>Recent content in Howtos on phpCaddy</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 24 Sep 2017 17:58:08 +0800</lastBuildDate>
+    
+	<atom:link href="/howtos/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>01.安装 phpCaddy</title>
+      <link>/howtos/install/</link>
+      <pubDate>Sun, 24 Sep 2017 17:58:08 +0800</pubDate>
+      
+      <guid>/howtos/install/</guid>
+      <description> 新建数据库，就不说了&amp;hellip; 略过
+caddy 添加新站点  1. caddy (golang 写的可以 自动https 的 HTTP/2 Web服务器) 2. php (以 fastcgi 方式运行，默认绑定 9000 端口) 3. mysql (5.7 支持 json 类型) 4. redis (现在也是标配了) 5. apache (给不习惯用 caddy 的人)  apach 添加新站点  1. caddy (golang 写的可以 自动https 的 HTTP/2 Web服务器) 2. php (以 fastcgi 方式运行，默认绑定 9000 端口) 3. mysql (5.7 支持 json 类型) 4. redis (现在也是标配了) 5. apache (给不习惯用 caddy 的人)  </description>
+    </item>
+    
+    <item>
+      <title>02.如何添加新站点</title>
+      <link>/howtos/add/</link>
+      <pubDate>Sun, 24 Sep 2017 17:58:08 +0800</pubDate>
+      
+      <guid>/howtos/add/</guid>
+      <description> 新建数据库，就不说了&amp;hellip; 略过
+caddy 添加新站点  1. caddy (golang 写的可以 自动https 的 HTTP/2 Web服务器) 2. php (以 fastcgi 方式运行，默认绑定 9000 端口) 3. mysql (5.7 支持 json 类型) 4. redis (现在也是标配了) 5. apache (给不习惯用 caddy 的人)  apach 添加新站点  1. caddy (golang 写的可以 自动https 的 HTTP/2 Web服务器) 2. php (以 fastcgi 方式运行，默认绑定 9000 端口) 3. mysql (5.7 支持 json 类型) 4. redis (现在也是标配了) 5. apache (给不习惯用 caddy 的人)  </description>
+    </item>
+    
+  </channel>
+</rss>

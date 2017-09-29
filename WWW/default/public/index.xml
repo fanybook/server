@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>phpCaddy</title>
+    <link>/</link>
+    <description>Recent content on phpCaddy</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 24 Sep 2017 17:58:08 +0800</lastBuildDate>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>00.关于 phpCaddy</title>
+      <link>/page/about/</link>
+      <pubDate>Sun, 24 Sep 2017 17:58:08 +0800</pubDate>
+      
+      <guid>/page/about/</guid>
+      <description>phpCaddy 是一个 windows 的 php + caddy服务器的套件 只在64位win10上测试过，它包括： 1. caddy (golang 写的可以 自动https 的 HTTP/2 Web服务器) 2. php (以 fastcgi 方式运行，默认绑定 9000 端口) 3. mysql (5.7 支持 json 类型) 4. redis (现在也是标配了) 5. apache (给不习惯用 caddy 的人)  &amp;lt;.bat&amp;gt; 批处理方式安装、启动和停止  1. 原因一：我不会写客户端，而我有觉得与其把精力发在写客户端上，不如把文档写清晰，让更多人会用，用的灵活 2. 原因二：灵活，用 &amp;lt;.bat&amp;gt; 批处理可一方便的改里面各个组件的版本，所以非常灵活 3. 原因三：我做的只是我用的版本，包括组件的版本 64/32bit版本 包括测试的windows版本，所以我没做的，大家可以自行扩展  Linux下 怎么安装 php + caddy phpCaddy 是没有提供 linux 版本的，因为已经有大牛写了，抄过来不合适，所以请移步
+ 先安装 lamp，解压这步之后，先在 php.sh 里把 --enable-fpm \ 添加进去，再进行安装</description>
+    </item>
+    
+    <item>
+      <title>01.安装 phpCaddy</title>
+      <link>/howtos/install/</link>
+      <pubDate>Sun, 24 Sep 2017 17:58:08 +0800</pubDate>
+      
+      <guid>/howtos/install/</guid>
+      <description> 新建数据库，就不说了&amp;hellip; 略过
+caddy 添加新站点  1. caddy (golang 写的可以 自动https 的 HTTP/2 Web服务器) 2. php (以 fastcgi 方式运行，默认绑定 9000 端口) 3. mysql (5.7 支持 json 类型) 4. redis (现在也是标配了) 5. apache (给不习惯用 caddy 的人)  apach 添加新站点  1. caddy (golang 写的可以 自动https 的 HTTP/2 Web服务器) 2. php (以 fastcgi 方式运行，默认绑定 9000 端口) 3. mysql (5.7 支持 json 类型) 4. redis (现在也是标配了) 5. apache (给不习惯用 caddy 的人)  </description>
+    </item>
+    
+    <item>
+      <title>02.如何添加新站点</title>
+      <link>/howtos/add/</link>
+      <pubDate>Sun, 24 Sep 2017 17:58:08 +0800</pubDate>
+      
+      <guid>/howtos/add/</guid>
+      <description> 新建数据库，就不说了&amp;hellip; 略过
+caddy 添加新站点  1. caddy (golang 写的可以 自动https 的 HTTP/2 Web服务器) 2. php (以 fastcgi 方式运行，默认绑定 9000 端口) 3. mysql (5.7 支持 json 类型) 4. redis (现在也是标配了) 5. apache (给不习惯用 caddy 的人)  apach 添加新站点  1. caddy (golang 写的可以 自动https 的 HTTP/2 Web服务器) 2. php (以 fastcgi 方式运行，默认绑定 9000 端口) 3. mysql (5.7 支持 json 类型) 4. redis (现在也是标配了) 5. apache (给不习惯用 caddy 的人)  </description>
+    </item>
+    
+    <item>
+      <title>11.配置过程 Caddy</title>
+      <link>/install/caddy/</link>
+      <pubDate>Sun, 24 Sep 2017 17:58:08 +0800</pubDate>
+      
+      <guid>/install/caddy/</guid>
+      <description> 一、下载 https://caddyserver.com/download
+选择 Windows 64-bit 插件 http.cors http.filemanager http.git http.hugo 授权 Personal (free)  二、安装  1. 解压至 caddy 2. 在 caddy 目录 新建 Caddyfile 文件，写入 `import ./vhosts/*` 3. 在 caddy 目录 新建 vhosts 目录 4. 在 vhosts 目录 新建 default.conf 文件，写default站点的配置  default.conf 的配置
+127.0.0.1:80 { #为了做成套件无奈写成相对路径，其实写绝对路径更直观 root ./WWW/default/public fastcgi / 127.0.0.1:9000 php { index index.php } }  </description>
+    </item>
+    
+    <item>
+      <title>12.配置过程 PHP</title>
+      <link>/install/php/</link>
+      <pubDate>Sun, 24 Sep 2017 17:58:08 +0800</pubDate>
+      
+      <guid>/install/php/</guid>
+      <description> 一、下载 http://windows.php.net/download
+ 1. 选择 VC14 x64 Non Thread Safe (Zip)  二、安装  1. 解压至 php 2. 复制一个 php.ini-development 改名为 php.ini 3. 修改 php.ini 4. 启动。 &amp;lt;参考：启动套件.bat&amp;gt;  修改 php.ini
+ 1. 去掉这行前面的注释 extension_dir = &amp;quot;ext&amp;quot; 2. 去掉这行前面的注释 cgi.fix_pathinfo=1 3. session.save_path = &amp;quot;../tmp/session&amp;quot; 4. 在最最后面添加 [XDebug] xdebug.profiler_output_dir=&amp;quot;../tmp/xdebug&amp;quot; xdebug.trace_output_dir=&amp;quot;../tmp/xdebug&amp;quot; 5. 在最最后面添加 [XCache]  </description>
+    </item>
+    
+    <item>
+      <title>13.配置过程 MySQL</title>
+      <link>/install/mysql/</link>
+      <pubDate>Sun, 24 Sep 2017 17:58:08 +0800</pubDate>
+      
+      <guid>/install/mysql/</guid>
+      <description>一、下载 https://dev.mysql.com/downloads/mysql/
+ 1.选择 winx64.zip  二、精简  1. mysql 中仅保留 bin、lib 和 share 三个子目录，其他子目录及文件全部删除 2. bin 目录下仅保留 mysqld.exe、mysqladmin.exe和 mysql.exe 三个文件，其他子目录及文件全部删除 3. lib 目录下保留 libmysql.dll 和 libmysql.lib 两个文件，其他子目录及文件全部删除 4. share 目录下仅保留 charsets 和 english 两个子目录，其他子目录及文件全部删除  三、安装  1. mysql 的路径中不要出现汉字 2. 在 mysql 目录 新建 my.ini 文件 3. 初始化 mysql 和设置 mysql 的用户名、密码 &amp;lt;参考：@安装.bat [`:install` 之后才是有效代码]&amp;gt; 4. 启动 &amp;lt;参考：启动套件.bat&amp;gt;  my.ini 的配置
+[client] port=3306 #新版不支持在my.ini中直接设置字符集为utf8。解决方法是在default-character-set前面加上loose- loose-default-character-set = utf8 [mysqld] port=3306 #写了如果要远程访问 &amp;lt;参考：四、备忘&amp;gt; bind-address=0.</description>
+    </item>
+    
+    <item>
+      <title>14.配置过程 Redis</title>
+      <link>/install/redis/</link>
+      <pubDate>Sun, 24 Sep 2017 17:58:08 +0800</pubDate>
+      
+      <guid>/install/redis/</guid>
+      <description> 一、下载 https://github.com/MicrosoftArchive/redis/releases
+ 1. 选择 Redis-x64-3.2.100.zip  二、安装  1、无需安装，启动就好。 &amp;lt;参考：启动套件.bat&amp;gt;  </description>
+    </item>
+    
+    <item>
+      <title>15.配置过程 Apache</title>
+      <link>/install/apache/</link>
+      <pubDate>Sun, 24 Sep 2017 17:58:08 +0800</pubDate>
+      
+      <guid>/install/apache/</guid>
+      <description>一、下载 https://www.apachelounge.com/download/VC14/
+ 1. 选择 win64-VC14.zip (与 VC14 的 php 统一) 2. Apache 2.4 modules VC14 请酌情下载，因为 win64-VC14.zip 已经带了很多 module  但是 mod_fcgid 这个是必须下载的，因为就是用 fastcgi 跑 php
+二、精简  1. mysql 中仅保留 bin、lib 和 share 三个子目录，其他子目录及文件全部删除。 2. bin 目录下仅保留 mysqld.exe、mysqladmin.exe和 mysql.exe 三个文件，其他子目录及文件全部删除。 3. lib 目录下保留 libmysql.dll 和 libmysql.lib 两个文件，其他子目录及文件全部删除。 4. share 目录下仅保留 charsets 和 english 两个子目录，其他子目录及文件全部删除。  三、安装  1. 解压至 apache 2. 修改 conf/httpd.conf 这个配置文件 3. 启动 &amp;lt;参考：启动套件.bat&amp;gt;  httpd.</description>
+    </item>
+    
+    <item>
+      <title>16.配置过程 phpMyAdmin</title>
+      <link>/install/phpmyadmin/</link>
+      <pubDate>Sun, 24 Sep 2017 17:58:08 +0800</pubDate>
+      
+      <guid>/install/phpmyadmin/</guid>
+      <description> 一、下载 https://www.phpmyadmin.net/downloads/
+ 1. 选择 all-languages.zip  二、安装  1. 无需安装，启动就好。 &amp;lt;参考：启动套件.bat&amp;gt; 2. 打开 php 的 mysqli.dll  </description>
+    </item>
+    
+  </channel>
+</rss>

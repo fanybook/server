@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" lang="zh-cn">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.27.1" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>15.配置过程 Apache &middot; phpCaddy</title>
+
+  
+  <link rel="stylesheet" href="/css/print.css" media="print">
+  <link rel="stylesheet" href="/css/poole.css">
+  <link rel="stylesheet" href="/css/syntax.css">
+  <link rel="stylesheet" href="/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="phpCaddy" />
+</head>
+
+  <body class="theme-base-08 ">
+  <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>phpCaddy</h1></a>
+      <p class="lead">
+       phpCaddy 的配置过程，慢慢看明白就可以自己升级组件了 
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/phpmyadmin">PhpMyAdmin</a> | <a href="/phpinfo">PhpInfo</li>
+      <li><a href="/page/about/"> 00.关于 phpCaddy </a></li><li><a href="/howtos/install/"> 01.安装 phpCaddy </a></li><li><a href="/howtos/add/"> 02.如何添加新站点 </a></li><li><a href="/install/caddy/"> 11.配置过程 Caddy </a></li><li><a href="/install/php/"> 12.配置过程 PHP </a></li><li><a href="/install/mysql/"> 13.配置过程 MySQL </a></li><li><a href="/install/redis/"> 14.配置过程 Redis </a></li><li><a href="/install/apache/"> 15.配置过程 Apache </a></li><li><a href="/install/phpmyadmin/"> 16.配置过程 phpMyAdmin </a></li>
+    </ul>
+
+    <p>&copy; 2017. All rights reserved. </p>
+  </div>
+</div>
+
+    <div class="content container">
+    <div class="post">
+  <h1>15.配置过程 Apache</h1>
+  <span class="post-date">2017-09-24, Sun</span>
+  
+
+<h3 id="一-下载">一、下载</h3>
+
+<p><a href="https://www.apachelounge.com/download/VC14/">https://www.apachelounge.com/download/VC14/</a></p>
+
+<pre><code> 1. 选择 win64-VC14.zip (与 VC14 的 php 统一)
+ 2. Apache 2.4 modules VC14 请酌情下载，因为 win64-VC14.zip 已经带了很多 module
+</code></pre>
+
+<p>但是 <strong>mod_fcgid</strong> 这个是必须下载的，因为就是用 fastcgi 跑 php</p>
+
+<h3 id="二-精简">二、精简</h3>
+
+<pre><code> 1. mysql 中仅保留 bin、lib 和 share 三个子目录，其他子目录及文件全部删除。
+ 2. bin 目录下仅保留 mysqld.exe、mysqladmin.exe和 mysql.exe 三个文件，其他子目录及文件全部删除。
+ 3. lib 目录下保留 libmysql.dll 和 libmysql.lib 两个文件，其他子目录及文件全部删除。
+ 4. share 目录下仅保留 charsets 和 english 两个子目录，其他子目录及文件全部删除。
+</code></pre>
+
+<h3 id="三-安装">三、安装</h3>
+
+<pre><code> 1. 解压至 apache
+ 2. 修改 conf/httpd.conf 这个配置文件
+ 3. 启动 &lt;参考：启动套件.bat&gt;
+</code></pre>
+
+<p>httpd.conf 的 配置</p>
+
+<pre><code class="language-php"># ServerRoot    指向 apache 的目录
+ServerRoot &quot;c:/Apache24&quot;
+
+# Listen        是监听的端口，默认80，如果想做 https 站，可以追加 Listen 443
+Listen 80
+Listen 443
+
+# ↓↓这些都是给默认站点设置的
+# ServerName    服务器的域名，不配会报错，一般配成 localhost
+ServerName localhost
+# Directory     全局的一些设置
+&lt;Directory /&gt;
+    AllowOverride none
+    Require all denied
+&lt;/Directory&gt;
+DocumentRoot &quot;c:/Apache24/htdocs&quot;
+# Directory     加了目录就是对全局设置的一些重写
+&lt;Directory &quot;c:/Apache24/htdocs&quot;&gt;
+    #
+    # Possible values for the Options directive are &quot;None&quot;, &quot;All&quot;,
+    # or any combination of:
+    #   Indexes Includes FollowSymLinks SymLinksifOwnerMatch ExecCGI MultiViews
+    #
+    # Note that &quot;MultiViews&quot; must be named *explicitly* --- &quot;Options All&quot;
+    # doesn't give it to you.
+    #
+    # The Options directive is both complicated and important.  Please see
+    # http://httpd.apache.org/docs/2.4/mod/core.html#options
+    # for more information.
+    #
+    Options Indexes FollowSymLinks
+
+    #
+    # AllowOverride controls what directives may be placed in .htaccess files.
+    # It can be &quot;All&quot;, &quot;None&quot;, or any combination of the keywords:
+    #   AllowOverride FileInfo AuthConfig Limit
+    #
+    AllowOverride None
+
+    #
+    # Controls who can get stuff from this server.
+    #
+    Require all granted
+&lt;/Directory&gt;
+
+# ↓↓这些可以使用默认，不配置
+# ErrorLog 错误日志，可以选择移到 tmp 里
+ErrorLog &quot;logs/error.log&quot;
+
+# LogLevel 日志级别
+LogLevel warn
+
+# CustomLog 访问日志，可以选择移到 tmp 里
+CustomLog &quot;logs/access.log&quot; common
+
+# ScriptAlias 不用可以注视掉
+#ScriptAlias /cgi-bin/ &quot;c:/Apache24/cgi-bin/&quot;
+#&lt;Directory &quot;c:/Apache24/cgi-bin&quot;&gt;
+#    AllowOverride None
+#    Options None
+#    Require all granted
+#&lt;/Directory&gt;
+</code></pre>
+
+<pre><code class="language-php"># DirectoryIndex 在入口文件里添加 index.php，放在前面
+DirectoryIndex index.php index.html
+
+# 添加
+LoadModule fcgid_module modules/mod_fcgid.so
+&lt;IfModule fcgid_module&gt;
+    Include conf/extra/httpd-fcgid.conf
+    AddHandler fcgid-script .php
+    FcgidWrapper &quot;D:/phpCaddy/php7.1nts/php-cgi.exe&quot; .php
+&lt;/IfModule&gt;
+
+# Include 打开 httpd-mpm.conf 添加 Include conf/vhost/*.conf
+Include conf/extra/httpd-mpm.conf
+# 加了这句，就要建个默认的空 .conf 否则无法启动
+Include conf/vhost/*.conf
+</code></pre>
+
+<h3 id="四-备忘">四、备忘</h3>
+
+<p>httpd.exe –k install -n &ldquo;Apache24&rdquo;</p>
+
+<pre><code>httpd.exe –k install 可以把 apache 添加为系统服务
+
+-n &quot;Apache24&quot; 可以控制要添加的系统服务 “名字”
+</code></pre>
+
+<p>httpd.exe -k uninstall -n &rdquo;Apache24&rdquo;</p>
+
+<pre><code>httpd.exe -k uninstall 可以把 apache 系统服务移除
+
+-n &quot;Apache24&quot; 可以控制要移除的系统服务 “名字”
+</code></pre>
+
+<p>80端口被占用</p>
+
+<pre><code>`no listening sockets available, shutting down` 错误信息是：监听端口被占用了，常见于默认80端口
+</code></pre>
+
+</div>
+
+
+    </div>
+
+    
+  </body>
+</html>

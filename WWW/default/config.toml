@@ -1,0 +1,8 @@
+baseURL = "/"
+languageCode = "zh-cn"
+title = "phpCaddy"
+theme = "hyde"
+
+[params]
+  themeColor = "theme-base-08"
+  description = "phpCaddy 的配置过程，慢慢看明白就可以自己升级组件了"

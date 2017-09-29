@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" lang="zh-cn">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.27.1" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>12.配置过程 PHP &middot; phpCaddy</title>
+
+  
+  <link rel="stylesheet" href="/css/print.css" media="print">
+  <link rel="stylesheet" href="/css/poole.css">
+  <link rel="stylesheet" href="/css/syntax.css">
+  <link rel="stylesheet" href="/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="phpCaddy" />
+</head>
+
+  <body class="theme-base-08 ">
+  <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>phpCaddy</h1></a>
+      <p class="lead">
+       phpCaddy 的配置过程，慢慢看明白就可以自己升级组件了 
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/phpmyadmin">PhpMyAdmin</a> | <a href="/phpinfo">PhpInfo</li>
+      <li><a href="/page/about/"> 00.关于 phpCaddy </a></li><li><a href="/howtos/install/"> 01.安装 phpCaddy </a></li><li><a href="/howtos/add/"> 02.如何添加新站点 </a></li><li><a href="/install/caddy/"> 11.配置过程 Caddy </a></li><li><a href="/install/php/"> 12.配置过程 PHP </a></li><li><a href="/install/mysql/"> 13.配置过程 MySQL </a></li><li><a href="/install/redis/"> 14.配置过程 Redis </a></li><li><a href="/install/apache/"> 15.配置过程 Apache </a></li><li><a href="/install/phpmyadmin/"> 16.配置过程 phpMyAdmin </a></li>
+    </ul>
+
+    <p>&copy; 2017. All rights reserved. </p>
+  </div>
+</div>
+
+    <div class="content container">
+    <div class="post">
+  <h1>12.配置过程 PHP</h1>
+  <span class="post-date">2017-09-24, Sun</span>
+  
+
+<h3 id="一-下载">一、下载</h3>
+
+<p><a href="http://windows.php.net/download">http://windows.php.net/download</a></p>
+
+<pre><code> 1. 选择 VC14 x64 Non Thread Safe (Zip)
+</code></pre>
+
+<h3 id="二-安装">二、安装</h3>
+
+<pre><code> 1. 解压至 php
+ 2. 复制一个 php.ini-development 改名为 php.ini
+ 3. 修改 php.ini
+ 4. 启动。 &lt;参考：启动套件.bat&gt;
+</code></pre>
+
+<p>修改 php.ini</p>
+
+<pre><code> 1. 去掉这行前面的注释 extension_dir = &quot;ext&quot;
+ 2. 去掉这行前面的注释 cgi.fix_pathinfo=1
+ 3. session.save_path = &quot;../tmp/session&quot;
+ 4. 在最最后面添加
+    [XDebug]
+    xdebug.profiler_output_dir=&quot;../tmp/xdebug&quot;
+    xdebug.trace_output_dir=&quot;../tmp/xdebug&quot;
+ 5. 在最最后面添加
+    [XCache]
+</code></pre>
+
+</div>
+
+
+    </div>
+
+    
+  </body>
+</html>

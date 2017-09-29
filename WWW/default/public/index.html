@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" lang="zh-cn">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.27.1" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>phpCaddy</title>
+
+  
+  <link rel="stylesheet" href="/css/print.css" media="print">
+  <link rel="stylesheet" href="/css/poole.css">
+  <link rel="stylesheet" href="/css/syntax.css">
+  <link rel="stylesheet" href="/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="/index.xml" rel="alternate" type="application/rss+xml" title="phpCaddy" />
+</head>
+
+  <body class="theme-base-08 ">
+  <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>phpCaddy</h1></a>
+      <p class="lead">
+       phpCaddy 的配置过程，慢慢看明白就可以自己升级组件了 
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/phpmyadmin">PhpMyAdmin</a> | <a href="/phpinfo">PhpInfo</li>
+      <li><a href="/page/about/"> 00.关于 phpCaddy </a></li><li><a href="/howtos/install/"> 01.安装 phpCaddy </a></li><li><a href="/howtos/add/"> 02.如何添加新站点 </a></li><li><a href="/install/caddy/"> 11.配置过程 Caddy </a></li><li><a href="/install/php/"> 12.配置过程 PHP </a></li><li><a href="/install/mysql/"> 13.配置过程 MySQL </a></li><li><a href="/install/redis/"> 14.配置过程 Redis </a></li><li><a href="/install/apache/"> 15.配置过程 Apache </a></li><li><a href="/install/phpmyadmin/"> 16.配置过程 phpMyAdmin </a></li>
+    </ul>
+
+    <p>&copy; 2017. All rights reserved. </p>
+  </div>
+</div>
+
+    <div class="content container">
+    <div class="posts">
+<div class="post">
+  <h1 class="post-title">
+    <a href="/page/about/">00.关于 phpCaddy</a>
+  </h1>
+  <span class="post-date">2017-09-24, Sun</span>
+  
+
+<h3 id="phpcaddy-是一个-windows-的-php-caddy服务器的套件">phpCaddy 是一个 windows 的 php + caddy服务器的套件</h3>
+
+<pre><code>只在64位win10上测试过，它包括：
+ 1. caddy   (golang 写的可以 自动https 的 HTTP/2 Web服务器)
+ 2. php     (以 fastcgi 方式运行，默认绑定 9000 端口)
+ 3. mysql   (5.7 支持 json 类型)
+ 4. redis   (现在也是标配了)
+ 5. apache  (给不习惯用 caddy 的人)
+</code></pre>
+
+<h3 id="bat-批处理方式安装-启动和停止">&lt;.bat&gt; 批处理方式安装、启动和停止</h3>
+
+<pre><code> 1. 原因一：我不会写客户端，而我有觉得与其把精力发在写客户端上，不如把文档写清晰，让更多人会用，用的灵活
+ 2. 原因二：灵活，用 &lt;.bat&gt; 批处理可一方便的改里面各个组件的版本，所以非常灵活
+ 3. 原因三：我做的只是我用的版本，包括组件的版本 64/32bit版本 包括测试的windows版本，所以我没做的，大家可以自行扩展
+</code></pre>
+
+<h3 id="linux下-怎么安装-php-caddy">Linux下 怎么安装 php + caddy</h3>
+
+<p>phpCaddy 是没有提供 linux 版本的，因为已经有大牛写了，抄过来不合适，所以请移步</p>
+
+<ol>
+<li><p>先安装 lamp，解压这步之后，先在 php.sh 里把 <code>--enable-fpm \</code> 添加进去，再进行安装</p>
+
+<p>然后在安装 php 扩展时 选择 redis 才会安装 redis 服务器，同时也会 安装 php_redis 扩展，会和 laravel 里的 Redis 类冲突，可以关闭</p>
+
+<p><a href="https://lamp.sh/install.html">https://lamp.sh/install.html</a></p></li>
+
+<li><p>再安装 caddy，php-fpm 默认是用 nobody 运行的，操作文件时可能会有权限问题，记得改权限</p>
+
+<p><a href="https://doub.io/shell-jc1/">https://doub.io/shell-jc1/</a></p></li>
+</ol>
+
+<h3 id="致敬一下-phpstudy">致敬一下 phpStudy</h3>
+
+<pre><code>我之前一直在 windows 下使用 phpStudy，也很感谢作者的分享
+</code></pre>
+
+<p>但有时受限于 phpStudy 里各个组件的版本，所以就自己弄了一个，加之又想尝试 caddy 又懒得在各个电脑重复配置，就搞了这个 <strong>phpCaddy</strong>，请勿见笑 23333~~</p>
+
+<p><code>phpCaddy</code> 不失为 <code>phpStudy</code> 之外的一个小选择</p>
+
+</div><div class="post">
+  <h1 class="post-title">
+    <a href="/howtos/install/">01.安装 phpCaddy</a>
+  </h1>
+  <span class="post-date">2017-09-24, Sun</span>
+  
+
+<p>新建数据库，就不说了&hellip; 略过</p>
+
+<h3 id="caddy-添加新站点">caddy 添加新站点</h3>
+
+<pre><code> 1. caddy   (golang 写的可以 自动https 的 HTTP/2 Web服务器)
+ 2. php     (以 fastcgi 方式运行，默认绑定 9000 端口)
+ 3. mysql   (5.7 支持 json 类型)
+ 4. redis   (现在也是标配了)
+ 5. apache  (给不习惯用 caddy 的人)
+</code></pre>
+
+<h3 id="apach-添加新站点">apach 添加新站点</h3>
+
+<pre><code> 1. caddy   (golang 写的可以 自动https 的 HTTP/2 Web服务器)
+ 2. php     (以 fastcgi 方式运行，默认绑定 9000 端口)
+ 3. mysql   (5.7 支持 json 类型)
+ 4. redis   (现在也是标配了)
+ 5. apache  (给不习惯用 caddy 的人)
+</code></pre>
+
+</div><div class="post">
+  <h1 class="post-title">
+    <a href="/howtos/add/">02.如何添加新站点</a>
+  </h1>
+  <span class="post-date">2017-09-24, Sun</span>
+  
+
+<p>新建数据库，就不说了&hellip; 略过</p>
+
+<h3 id="caddy-添加新站点">caddy 添加新站点</h3>
+
+<pre><code> 1. caddy   (golang 写的可以 自动https 的 HTTP/2 Web服务器)
+ 2. php     (以 fastcgi 方式运行，默认绑定 9000 端口)
+ 3. mysql   (5.7 支持 json 类型)
+ 4. redis   (现在也是标配了)
+ 5. apache  (给不习惯用 caddy 的人)
+</code></pre>
+
+<h3 id="apach-添加新站点">apach 添加新站点</h3>
+
+<pre><code> 1. caddy   (golang 写的可以 自动https 的 HTTP/2 Web服务器)
+ 2. php     (以 fastcgi 方式运行，默认绑定 9000 端口)
+ 3. mysql   (5.7 支持 json 类型)
+ 4. redis   (现在也是标配了)
+ 5. apache  (给不习惯用 caddy 的人)
+</code></pre>
+
+</div><div class="post">
+  <h1 class="post-title">
+    <a href="/install/caddy/">11.配置过程 Caddy</a>
+  </h1>
+  <span class="post-date">2017-09-24, Sun</span>
+  
+
+<h3 id="一-下载">一、下载</h3>
+
+<p><a href="https://caddyserver.com/download">https://caddyserver.com/download</a></p>
+
+<pre><code>选择 Windows 64-bit
+插件 http.cors http.filemanager http.git http.hugo
+授权 Personal (free)
+</code></pre>
+
+<h3 id="二-安装">二、安装</h3>
+
+<pre><code> 1. 解压至 caddy
+ 2. 在 caddy 目录   新建 Caddyfile 文件，写入 `import ./vhosts/*`
+ 3. 在 caddy 目录   新建 vhosts 目录
+ 4. 在 vhosts 目录  新建 default.conf 文件，写default站点的配置
+</code></pre>
+
+<p>default.conf 的配置</p>
+
+<pre><code class="language-php">127.0.0.1:80 {
+    #为了做成套件无奈写成相对路径，其实写绝对路径更直观
+    root                ./WWW/default/public
+
+    fastcgi / 127.0.0.1:9000 php {
+        index index.php
+    }
+}
+</code></pre>
+
+</div><div class="post">
+  <h1 class="post-title">
+    <a href="/install/php/">12.配置过程 PHP</a>
+  </h1>
+  <span class="post-date">2017-09-24, Sun</span>
+  
+
+<h3 id="一-下载">一、下载</h3>
+
+<p><a href="http://windows.php.net/download">http://windows.php.net/download</a></p>
+
+<pre><code> 1. 选择 VC14 x64 Non Thread Safe (Zip)
+</code></pre>
+
+<h3 id="二-安装">二、安装</h3>
+
+<pre><code> 1. 解压至 php
+ 2. 复制一个 php.ini-development 改名为 php.ini
+ 3. 修改 php.ini
+ 4. 启动。 &lt;参考：启动套件.bat&gt;
+</code></pre>
+
+<p>修改 php.ini</p>
+
+<pre><code> 1. 去掉这行前面的注释 extension_dir = &quot;ext&quot;
+ 2. 去掉这行前面的注释 cgi.fix_pathinfo=1
+ 3. session.save_path = &quot;../tmp/session&quot;
+ 4. 在最最后面添加
+    [XDebug]
+    xdebug.profiler_output_dir=&quot;../tmp/xdebug&quot;
+    xdebug.trace_output_dir=&quot;../tmp/xdebug&quot;
+ 5. 在最最后面添加
+    [XCache]
+</code></pre>
+
+</div><div class="post">
+  <h1 class="post-title">
+    <a href="/install/mysql/">13.配置过程 MySQL</a>
+  </h1>
+  <span class="post-date">2017-09-24, Sun</span>
+  
+
+<h3 id="一-下载">一、下载</h3>
+
+<p><a href="https://dev.mysql.com/downloads/mysql/">https://dev.mysql.com/downloads/mysql/</a></p>
+
+<pre><code> 1.选择 winx64.zip
+</code></pre>
+
+<h3 id="二-精简">二、精简</h3>
+
+<pre><code> 1. mysql 中仅保留 bin、lib 和 share 三个子目录，其他子目录及文件全部删除
+ 2. bin 目录下仅保留 mysqld.exe、mysqladmin.exe和 mysql.exe 三个文件，其他子目录及文件全部删除
+ 3. lib 目录下保留 libmysql.dll 和 libmysql.lib 两个文件，其他子目录及文件全部删除
+ 4. share 目录下仅保留 charsets 和 english 两个子目录，其他子目录及文件全部删除
+</code></pre>
+
+<h3 id="三-安装">三、安装</h3>
+
+<pre><code> 1. mysql 的路径中不要出现汉字
+ 2. 在 mysql 目录  新建 my.ini 文件
+ 3. 初始化 mysql 和设置 mysql 的用户名、密码 &lt;参考：@安装.bat [`:install` 之后才是有效代码]&gt;
+ 4. 启动 &lt;参考：启动套件.bat&gt;
+</code></pre>
+
+<p>my.ini 的配置</p>
+
+<pre><code class="language-php">[client]
+port=3306
+
+#新版不支持在my.ini中直接设置字符集为utf8。解决方法是在default-character-set前面加上loose-
+loose-default-character-set = utf8
+
+[mysqld]
+port=3306
+
+#写了如果要远程访问 &lt;参考：四、备忘&gt;
+bind-address=0.0.0.0
+
+#路径相对于 &lt;安装和启动的 .bat&gt;
+basedir=&quot;./mysql5.7/&quot;
+datadir=&quot;./mysql5.7/data/&quot;
+
+loose-default-character-set = utf8
+character-set-server=utf8
+
+#默认是innodb
+#default-storage-engine=MyISAM
+
+#减少一点data文件夹的体积
+innodb_log_file_size=24M
+</code></pre>
+
+<h3 id="四-备忘">四、备忘</h3>
+
+<p>设置远程连接</p>
+
+<pre><code>mysql&gt; use mysql
+mysql&gt; Grant all on *.* to 'root'@'%' identified by 'root用户的密码' with grant option;
+mysql&gt; flush privileges;
+</code></pre>
+
+<p>mysqld.exe -install Mysql57</p>
+
+<pre><code>mysqld.exe -install 可以把 mysql 添加为系统服务
+
+-install后面加 Mysql57 可以控制要添加的系统服务 “名字”
+</code></pre>
+
+<p>mysqld.exe -remove Mysql57</p>
+
+<pre><code>mysqld.exe -remove 可以把 mysql 系统服务移除
+
+-remove后面加 Mysql57 可以控制要移除的系统服务 “名字”，包括其他非 mysql 的服务
+
+这个命令也行：开始-&gt;运行-&gt;输入cmd-&gt;sc delete mysql
+</code></pre>
+
+<h3 id="五-参考">五、参考</h3>
+
+<p><a href="http://www.cnblogs.com/live41/p/3971518.html">http://www.cnblogs.com/live41/p/3971518.html</a></p>
+
+<p>phpStudy 的 my.ini</p>
+
+<pre><code class="language-php">#  power by phpStudy  2014  www.phpStudy.net  官网下载最新版
+
+[client]
+port=3306
+[mysql]
+default-character-set=utf8
+
+[mysqld]
+port=3306
+basedir=&quot;D:/phpStudy/MySQL/&quot;
+datadir=&quot;D:/phpStudy/MySQL/data/&quot;
+character-set-server=utf8
+default-storage-engine=MyISAM
+#支持 INNODB 引擎模式。修改为　default-storage-engine=INNODB　即可。
+#如果 INNODB 模式如果不能启动，删除data目录下ib开头的日志文件重新启动。
+
+sql-mode=&quot;NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION&quot;
+max_connections=512
+
+query_cache_size=0
+table_cache=256
+tmp_table_size=18M
+
+thread_cache_size=8
+myisam_max_sort_file_size=64G
+myisam_sort_buffer_size=35M
+key_buffer_size=25M
+read_buffer_size=64K
+read_rnd_buffer_size=256K
+sort_buffer_size=256K
+
+innodb_additional_mem_pool_size=2M
+
+innodb_flush_log_at_trx_commit=1
+innodb_log_buffer_size=1M
+
+innodb_buffer_pool_size=47M
+innodb_log_file_size=24M
+innodb_thread_concurrency=8
+</code></pre>
+
+</div><div class="post">
+  <h1 class="post-title">
+    <a href="/install/redis/">14.配置过程 Redis</a>
+  </h1>
+  <span class="post-date">2017-09-24, Sun</span>
+  
+
+<h3 id="一-下载">一、下载</h3>
+
+<p><a href="https://github.com/MicrosoftArchive/redis/releases">https://github.com/MicrosoftArchive/redis/releases</a></p>
+
+<pre><code> 1. 选择 Redis-x64-3.2.100.zip
+</code></pre>
+
+<h3 id="二-安装">二、安装</h3>
+
+<pre><code> 1、无需安装，启动就好。 &lt;参考：启动套件.bat&gt;
+</code></pre>
+
+</div><div class="post">
+  <h1 class="post-title">
+    <a href="/install/apache/">15.配置过程 Apache</a>
+  </h1>
+  <span class="post-date">2017-09-24, Sun</span>
+  
+
+<h3 id="一-下载">一、下载</h3>
+
+<p><a href="https://www.apachelounge.com/download/VC14/">https://www.apachelounge.com/download/VC14/</a></p>
+
+<pre><code> 1. 选择 win64-VC14.zip (与 VC14 的 php 统一)
+ 2. Apache 2.4 modules VC14 请酌情下载，因为 win64-VC14.zip 已经带了很多 module
+</code></pre>
+
+<p>但是 <strong>mod_fcgid</strong> 这个是必须下载的，因为就是用 fastcgi 跑 php</p>
+
+<h3 id="二-精简">二、精简</h3>
+
+<pre><code> 1. mysql 中仅保留 bin、lib 和 share 三个子目录，其他子目录及文件全部删除。
+ 2. bin 目录下仅保留 mysqld.exe、mysqladmin.exe和 mysql.exe 三个文件，其他子目录及文件全部删除。
+ 3. lib 目录下保留 libmysql.dll 和 libmysql.lib 两个文件，其他子目录及文件全部删除。
+ 4. share 目录下仅保留 charsets 和 english 两个子目录，其他子目录及文件全部删除。
+</code></pre>
+
+<h3 id="三-安装">三、安装</h3>
+
+<pre><code> 1. 解压至 apache
+ 2. 修改 conf/httpd.conf 这个配置文件
+ 3. 启动 &lt;参考：启动套件.bat&gt;
+</code></pre>
+
+<p>httpd.conf 的 配置</p>
+
+<pre><code class="language-php"># ServerRoot    指向 apache 的目录
+ServerRoot &quot;c:/Apache24&quot;
+
+# Listen        是监听的端口，默认80，如果想做 https 站，可以追加 Listen 443
+Listen 80
+Listen 443
+
+# ↓↓这些都是给默认站点设置的
+# ServerName    服务器的域名，不配会报错，一般配成 localhost
+ServerName localhost
+# Directory     全局的一些设置
+&lt;Directory /&gt;
+    AllowOverride none
+    Require all denied
+&lt;/Directory&gt;
+DocumentRoot &quot;c:/Apache24/htdocs&quot;
+# Directory     加了目录就是对全局设置的一些重写
+&lt;Directory &quot;c:/Apache24/htdocs&quot;&gt;
+    #
+    # Possible values for the Options directive are &quot;None&quot;, &quot;All&quot;,
+    # or any combination of:
+    #   Indexes Includes FollowSymLinks SymLinksifOwnerMatch ExecCGI MultiViews
+    #
+    # Note that &quot;MultiViews&quot; must be named *explicitly* --- &quot;Options All&quot;
+    # doesn't give it to you.
+    #
+    # The Options directive is both complicated and important.  Please see
+    # http://httpd.apache.org/docs/2.4/mod/core.html#options
+    # for more information.
+    #
+    Options Indexes FollowSymLinks
+
+    #
+    # AllowOverride controls what directives may be placed in .htaccess files.
+    # It can be &quot;All&quot;, &quot;None&quot;, or any combination of the keywords:
+    #   AllowOverride FileInfo AuthConfig Limit
+    #
+    AllowOverride None
+
+    #
+    # Controls who can get stuff from this server.
+    #
+    Require all granted
+&lt;/Directory&gt;
+
+# ↓↓这些可以使用默认，不配置
+# ErrorLog 错误日志，可以选择移到 tmp 里
+ErrorLog &quot;logs/error.log&quot;
+
+# LogLevel 日志级别
+LogLevel warn
+
+# CustomLog 访问日志，可以选择移到 tmp 里
+CustomLog &quot;logs/access.log&quot; common
+
+# ScriptAlias 不用可以注视掉
+#ScriptAlias /cgi-bin/ &quot;c:/Apache24/cgi-bin/&quot;
+#&lt;Directory &quot;c:/Apache24/cgi-bin&quot;&gt;
+#    AllowOverride None
+#    Options None
+#    Require all granted
+#&lt;/Directory&gt;
+</code></pre>
+
+<pre><code class="language-php"># DirectoryIndex 在入口文件里添加 index.php，放在前面
+DirectoryIndex index.php index.html
+
+# 添加
+LoadModule fcgid_module modules/mod_fcgid.so
+&lt;IfModule fcgid_module&gt;
+    Include conf/extra/httpd-fcgid.conf
+    AddHandler fcgid-script .php
+    FcgidWrapper &quot;D:/phpCaddy/php7.1nts/php-cgi.exe&quot; .php
+&lt;/IfModule&gt;
+
+# Include 打开 httpd-mpm.conf 添加 Include conf/vhost/*.conf
+Include conf/extra/httpd-mpm.conf
+# 加了这句，就要建个默认的空 .conf 否则无法启动
+Include conf/vhost/*.conf
+</code></pre>
+
+<h3 id="四-备忘">四、备忘</h3>
+
+<p>httpd.exe –k install -n &ldquo;Apache24&rdquo;</p>
+
+<pre><code>httpd.exe –k install 可以把 apache 添加为系统服务
+
+-n &quot;Apache24&quot; 可以控制要添加的系统服务 “名字”
+</code></pre>
+
+<p>httpd.exe -k uninstall -n &rdquo;Apache24&rdquo;</p>
+
+<pre><code>httpd.exe -k uninstall 可以把 apache 系统服务移除
+
+-n &quot;Apache24&quot; 可以控制要移除的系统服务 “名字”
+</code></pre>
+
+<p>80端口被占用</p>
+
+<pre><code>`no listening sockets available, shutting down` 错误信息是：监听端口被占用了，常见于默认80端口
+</code></pre>
+
+</div><div class="post">
+  <h1 class="post-title">
+    <a href="/install/phpmyadmin/">16.配置过程 phpMyAdmin</a>
+  </h1>
+  <span class="post-date">2017-09-24, Sun</span>
+  
+
+<h3 id="一-下载">一、下载</h3>
+
+<p><a href="https://www.phpmyadmin.net/downloads/">https://www.phpmyadmin.net/downloads/</a></p>
+
+<pre><code> 1. 选择 all-languages.zip
+</code></pre>
+
+<h3 id="二-安装">二、安装</h3>
+
+<pre><code> 1. 无需安装，启动就好。 &lt;参考：启动套件.bat&gt;
+ 2. 打开 php 的 mysqli.dll
+</code></pre>
+
+</div>
+</div>
+    </div>
+
+    
+  </body>
+</html>

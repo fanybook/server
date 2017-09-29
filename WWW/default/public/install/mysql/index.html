@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn" lang="zh-cn">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.27.1" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>13.配置过程 MySQL &middot; phpCaddy</title>
+
+  
+  <link rel="stylesheet" href="/css/print.css" media="print">
+  <link rel="stylesheet" href="/css/poole.css">
+  <link rel="stylesheet" href="/css/syntax.css">
+  <link rel="stylesheet" href="/css/hyde.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="phpCaddy" />
+</head>
+
+  <body class="theme-base-08 ">
+  <div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="/"><h1>phpCaddy</h1></a>
+      <p class="lead">
+       phpCaddy 的配置过程，慢慢看明白就可以自己升级组件了 
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/phpmyadmin">PhpMyAdmin</a> | <a href="/phpinfo">PhpInfo</li>
+      <li><a href="/page/about/"> 00.关于 phpCaddy </a></li><li><a href="/howtos/install/"> 01.安装 phpCaddy </a></li><li><a href="/howtos/add/"> 02.如何添加新站点 </a></li><li><a href="/install/caddy/"> 11.配置过程 Caddy </a></li><li><a href="/install/php/"> 12.配置过程 PHP </a></li><li><a href="/install/mysql/"> 13.配置过程 MySQL </a></li><li><a href="/install/redis/"> 14.配置过程 Redis </a></li><li><a href="/install/apache/"> 15.配置过程 Apache </a></li><li><a href="/install/phpmyadmin/"> 16.配置过程 phpMyAdmin </a></li>
+    </ul>
+
+    <p>&copy; 2017. All rights reserved. </p>
+  </div>
+</div>
+
+    <div class="content container">
+    <div class="post">
+  <h1>13.配置过程 MySQL</h1>
+  <span class="post-date">2017-09-24, Sun</span>
+  
+
+<h3 id="一-下载">一、下载</h3>
+
+<p><a href="https://dev.mysql.com/downloads/mysql/">https://dev.mysql.com/downloads/mysql/</a></p>
+
+<pre><code> 1.选择 winx64.zip
+</code></pre>
+
+<h3 id="二-精简">二、精简</h3>
+
+<pre><code> 1. mysql 中仅保留 bin、lib 和 share 三个子目录，其他子目录及文件全部删除
+ 2. bin 目录下仅保留 mysqld.exe、mysqladmin.exe和 mysql.exe 三个文件，其他子目录及文件全部删除
+ 3. lib 目录下保留 libmysql.dll 和 libmysql.lib 两个文件，其他子目录及文件全部删除
+ 4. share 目录下仅保留 charsets 和 english 两个子目录，其他子目录及文件全部删除
+</code></pre>
+
+<h3 id="三-安装">三、安装</h3>
+
+<pre><code> 1. mysql 的路径中不要出现汉字
+ 2. 在 mysql 目录  新建 my.ini 文件
+ 3. 初始化 mysql 和设置 mysql 的用户名、密码 &lt;参考：@安装.bat [`:install` 之后才是有效代码]&gt;
+ 4. 启动 &lt;参考：启动套件.bat&gt;
+</code></pre>
+
+<p>my.ini 的配置</p>
+
+<pre><code class="language-php">[client]
+port=3306
+
+#新版不支持在my.ini中直接设置字符集为utf8。解决方法是在default-character-set前面加上loose-
+loose-default-character-set = utf8
+
+[mysqld]
+port=3306
+
+#写了如果要远程访问 &lt;参考：四、备忘&gt;
+bind-address=0.0.0.0
+
+#路径相对于 &lt;安装和启动的 .bat&gt;
+basedir=&quot;./mysql5.7/&quot;
+datadir=&quot;./mysql5.7/data/&quot;
+
+loose-default-character-set = utf8
+character-set-server=utf8
+
+#默认是innodb
+#default-storage-engine=MyISAM
+
+#减少一点data文件夹的体积
+innodb_log_file_size=24M
+</code></pre>
+
+<h3 id="四-备忘">四、备忘</h3>
+
+<p>设置远程连接</p>
+
+<pre><code>mysql&gt; use mysql
+mysql&gt; Grant all on *.* to 'root'@'%' identified by 'root用户的密码' with grant option;
+mysql&gt; flush privileges;
+</code></pre>
+
+<p>mysqld.exe -install Mysql57</p>
+
+<pre><code>mysqld.exe -install 可以把 mysql 添加为系统服务
+
+-install后面加 Mysql57 可以控制要添加的系统服务 “名字”
+</code></pre>
+
+<p>mysqld.exe -remove Mysql57</p>
+
+<pre><code>mysqld.exe -remove 可以把 mysql 系统服务移除
+
+-remove后面加 Mysql57 可以控制要移除的系统服务 “名字”，包括其他非 mysql 的服务
+
+这个命令也行：开始-&gt;运行-&gt;输入cmd-&gt;sc delete mysql
+</code></pre>
+
+<h3 id="五-参考">五、参考</h3>
+
+<p><a href="http://www.cnblogs.com/live41/p/3971518.html">http://www.cnblogs.com/live41/p/3971518.html</a></p>
+
+<p>phpStudy 的 my.ini</p>
+
+<pre><code class="language-php">#  power by phpStudy  2014  www.phpStudy.net  官网下载最新版
+
+[client]
+port=3306
+[mysql]
+default-character-set=utf8
+
+[mysqld]
+port=3306
+basedir=&quot;D:/phpStudy/MySQL/&quot;
+datadir=&quot;D:/phpStudy/MySQL/data/&quot;
+character-set-server=utf8
+default-storage-engine=MyISAM
+#支持 INNODB 引擎模式。修改为　default-storage-engine=INNODB　即可。
+#如果 INNODB 模式如果不能启动，删除data目录下ib开头的日志文件重新启动。
+
+sql-mode=&quot;NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION&quot;
+max_connections=512
+
+query_cache_size=0
+table_cache=256
+tmp_table_size=18M
+
+thread_cache_size=8
+myisam_max_sort_file_size=64G
+myisam_sort_buffer_size=35M
+key_buffer_size=25M
+read_buffer_size=64K
+read_rnd_buffer_size=256K
+sort_buffer_size=256K
+
+innodb_additional_mem_pool_size=2M
+
+innodb_flush_log_at_trx_commit=1
+innodb_log_buffer_size=1M
+
+innodb_buffer_pool_size=47M
+innodb_log_file_size=24M
+innodb_thread_concurrency=8
+</code></pre>
+
+</div>
+
+
+    </div>
+
+    
+  </body>
+</html>
