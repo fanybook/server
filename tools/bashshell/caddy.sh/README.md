@@ -1,6 +1,7 @@
 描述
 ====
 这份脚本来自于 逗比根据地 https://doub.io/
+
 使用方法参照： https://doub.io/shell-jc1/
 
 系统要求
